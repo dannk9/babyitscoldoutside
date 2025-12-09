@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maybe This Deal's Too High</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            color: #2c3e50;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 3px solid #e74c3c;
+        }
+        
+        .header h1 {
+            font-size: 2.8rem;
+            color: #c0392b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .header .subtitle {
+            font-style: italic;
+            color: #34495e;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        
+        .header .context {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #ecf0f1;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .dialogue-container {
+            margin: 2rem 0;
+        }
+        
+        .dialogue-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            align-items: start;
+        }
+        
+        .library-line, .elsevier-line {
+            padding: 1.5rem;
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .library-line {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border-left: 5px solid #2c3e50;
+        }
+        
+        .elsevier-line {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            border-right: 5px solid #95a5a6;
+        }
+        
+        .speaker-label {
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .line-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        
+        .stage-direction {
+            text-align: center;
+            font-style: italic;
+            color: #7f8c8d;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #ecf0f1;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .section-break {
+            text-align: center;
+            margin: 3rem 0;
+            font-size: 2rem;
+            color: #e74c3c;
+        }
+        
+        .image-container {
+            text-align: center;
+            margin: 2.5rem 0;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        
+        .caption {
+            margin-top: 1rem;
+            font-style: italic;
+            color: #7f8c8d;
+            font-size: 0.95rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #e74c3c;
+            font-style: italic;
+            color: #7f8c8d;
+        }
+        
+        .key {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .key-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .key-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .library-color {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+        
+        .elsevier-color {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .dialogue-row {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .line-text {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Background Music Player -->
+        <audio id="bgMusic" loop>
+            <source src="https://github.com/dannk9/dannk9/raw/refs/heads/main/14501-Baby-its-cold-outside.mp3" type="audio/mpeg">
+            <source src="14501-Baby-its-cold-outside.mp3" type="audio/mpeg">
+        </audio>
+        
+        <div class="header">
+            <h1>❄️ Maybe This Deal's Too High ❄️</h1>
+            <div class="subtitle">A Consortium Negotiation Carol</div>
+            <div class="subtitle">(Sung to "Baby It's Cold Outside")</div>
+            
+            <div style="margin: 1.5rem 0; padding: 1rem; background: #ecf0f1; border-radius: 10px;">
+                <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: #7f8c8d;">
+                    🎵 <button id="musicToggle" style="padding: 0.5rem 1rem; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                        ▶️ Play "Baby It's Cold Outside" Instrumental
+                    </button>
+                </p>
+                <p style="font-size: 0.8rem; color: #95a5a6; margin-top: 0.5rem;">
+                    Click to play background music while you read along!
+                </p>
+            </div>
+            
+            <div class="context">
+                <strong>The Scene:</strong> It's 2025. The CAUL (Council of Australian University Librarians) Consortium is negotiating a Read and Publish agreement with Elsevier. Tensions are high. The Elsevier Reps want to close the deal. CAUL knows their members deserve better. Snow falls outside the window (metaphorically—it's Australia). The negotiations are about to collapse.
+            </div>
+        </div>
+
+        <div class="key">
+            <div class="key-item">
+                <div class="key-color library-color"></div>
+                <strong>CAUL Consortium</strong>
+            </div>
+            <div class="key-item">
+                <div class="key-color elsevier-color"></div>
+                <strong>Elsevier Sales Reps</strong>
+            </div>
+        </div>
+
+        <div class="stage-direction">
+            [The CAUL negotiators stand by the door with folders full of APC data and usage statistics]
+        </div>
+
+        <div class="dialogue-container">
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">I really can't stay...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">But baby, it's cold outside!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">I've got to go away...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">But baby, it's cold outside!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">This deal has been...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Look at the usage, it's rising!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">...so very tight!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Think of the researchers, they're crying!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stage-direction">
+            💼🤝📊 [Tense negotiations underway—both sides dug in on pricing]
+        </div>
+
+        <div class="dialogue-container">
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">Your APCs climb and climb...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">We'll throw in a small discount!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">Eight percent every time!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Just sign here on this line!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">Our members will start to worry...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Think of all our journals, gee whiz!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">Our VCs will be in a hurry...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Don't you want Nature and Cell as is?</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-break">❄️ ❄️ ❄️</div>
+
+        <div class="stage-direction">
+            [The Elsevier Reps slide a glossy brochure across the desk]
+        </div>
+
+        <div class="dialogue-container">
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">Your APCs aren't right...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">But you READ two thousand!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">The terms are too tight!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Read AND Publish—what a sight!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">We'll try open access...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Those journals are low-tier!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">Where equity embraces...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">No impact factor there!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stage-direction">
+            💰💵📄 [The Elsevier Reps push forward a contract—"Sign here for just 2% off!"]
+        </div>
+
+        <div class="dialogue-container">
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">Our authors deserve more...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">We've been partners for ages!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">Than these outrageous fees for sure...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Think of our bundled packages!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">At least I'm gonna say that I tried...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">What's the sense in walking now?</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">To negotiate with pride!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">We'll lose you your prestige somehow...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-break">🎄 🎄 🎄</div>
+
+        <div class="stage-direction">
+            [The CAUL negotiators take a deep breath, strengthened by thoughts of Plan S and other successful consortium negotiations worldwide]
+        </div>
+
+        <div class="dialogue-container">
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">I ought to say "No, no, no sir!"...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Let me sweeten the pot, yes?</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">At least we're gonna say that we tried!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Two percent off—our best!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">We really can't stay...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Baby, don't hold out!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">Ah, but it's cold outside!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Baby, it's cold outside!</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-break">❄️ 💔 ❄️</div>
+
+        <div class="stage-direction">
+            [Final verse - both getting desperate]
+        </div>
+
+        <div class="dialogue-container">
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">The answer is NO!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">But baby, you'll lose Cell!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">We really must go!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">And Lancet as well!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">We're going with arXiv...</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">Your members will revolt!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL</div>
+                    <div class="line-text">And we'll thrive!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier</div>
+                    <div class="line-text">This is your fault!</div>
+                </div>
+            </div>
+
+            <div class="dialogue-row">
+                <div class="library-line">
+                    <div class="speaker-label">CAUL (firmly)</div>
+                    <div class="line-text">Maybe this deal's too high!</div>
+                </div>
+                <div class="elsevier-line">
+                    <div class="speaker-label">Elsevier (defeated)</div>
+                    <div class="line-text">Baby, it's cold... outside...</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stage-direction">
+            🚶‍♀️❄️🚪 [CAUL gathers their folders—time to leave. The deal is unacceptable]
+        </div>
+
+        <div class="stage-direction" style="background: #fff3cd; color: #856404; font-weight: bold;">
+            [The CAUL negotiators gather their materials and stand tall. They cannot accept these terms. Negotiations have been paused. Behind them, the Elsevier Reps sit alone with their briefcase full of unacceptable contracts. The door closes. The fight for fair and sustainable scholarly publishing continues.]
+        </div>
+
+        <div class="footer">
+            <p style="font-size: 1.2rem; color: #856404; font-weight: bold; margin-bottom: 1rem;">
+                ⚠️ NEGOTIATIONS PAUSED — NO AGREEMENT REACHED ⚠️
+            </p>
+            <p>
+                Based on actual events: CAUL's negotiations with Elsevier for a Read and Publish agreement<br>
+                failed to reach an agreement in 2025. Discussions have been paused.
+            </p>
+            <p style="margin-top: 1.5rem; font-weight: bold; color: #2c3e50;">
+                "Maybe This Deal's Too High" — Sometimes walking away is the right answer. 💪
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Background music control
+        const music = document.getElementById('bgMusic');
+        const toggleBtn = document.getElementById('musicToggle');
+        let isPlaying = false;
+        
+        toggleBtn.addEventListener('click', function() {
+            if (isPlaying) {
+                music.pause();
+                toggleBtn.innerHTML = '▶️ Play Background Music';
+                isPlaying = false;
+            } else {
+                music.play().catch(e => {
+                    console.log('Audio play failed:', e);
+                    alert('Unable to play audio. Try clicking the button again or check your browser settings.');
+                });
+                toggleBtn.innerHTML = '⏸️ Pause Background Music';
+                isPlaying = true;
+            }
+        });
+        
+        // Volume control - set to comfortable background level
+        music.volume = 0.3;
+    </script>
+</body>
+</html>
